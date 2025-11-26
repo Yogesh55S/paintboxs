@@ -26,7 +26,7 @@ export default function Hero({
       setIsMobile(window.innerWidth < 768);
     }
 
-    handleResize(); // initial check
+    handleResize(); // Initial check
     window.addEventListener("resize", handleResize);
 
     return () => window.removeEventListener("resize", handleResize);
@@ -61,14 +61,14 @@ export default function Hero({
       className="min-h-screen flex items-center justify-center relative bg-cover bg-center"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      {/* Dark overlay for readability */}
+      {/* Overlay for readability */}
       <div className="absolute inset-0 bg-black bg-opacity-50 z-0" />
 
       <div className="relative max-w-6xl px-6 py-16 flex flex-col md:flex-row items-center gap-12 z-10">
-        {/* Left: Text */}
+        {/* Text Section */}
         <div className="max-w-xl text-center md:text-left md:flex-1 space-y-6 text-white">
           <p className="text-sm md:text-base font-semibold tracking-widest text-[#93c5fd] uppercase">
-            Professional House Painter 
+            Professional House Painter
           </p>
 
           <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">
@@ -79,8 +79,8 @@ export default function Hero({
           </h1>
 
           <p className="text-gray-300 text-base md:text-lg max-w-md mx-auto md:mx-0">
-            Reliable interior and exterior painting with smooth finish, neat
-            work, and on-time completion.
+            Reliable interior and exterior painting with smooth finish, neat work,
+            and on-time completion.
           </p>
 
           <div className="flex flex-wrap justify-center md:justify-start gap-6">
@@ -107,7 +107,7 @@ export default function Hero({
           </div>
         </div>
 
-        {/* Right: Carousel card */}
+        {/* Carousel Card Section */}
         <div
           className="w-full max-w-sm rounded-3xl bg-white shadow-2xl p-6 relative overflow-hidden"
           onMouseEnter={pauseAutoSlide}
@@ -123,7 +123,7 @@ export default function Hero({
             />
           </div>
 
-          {/* Pagination dots */}
+          {/* Pagination Dots */}
           <div className="flex justify-center mt-4 space-x-2">
             {images.map((_, idx) => (
               <button
