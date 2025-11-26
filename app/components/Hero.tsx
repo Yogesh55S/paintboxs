@@ -68,7 +68,7 @@ export default function Hero({
         {/* Left: Text */}
         <div className="max-w-xl text-center md:text-left md:flex-1 space-y-6 text-white">
           <p className="text-sm md:text-base font-semibold tracking-widest text-[#93c5fd] uppercase">
-            Professional House Painter
+            Professional House Painter 
           </p>
 
           <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">
