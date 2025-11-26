@@ -18,7 +18,7 @@ export default function Hero({
 }: Props) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
-  const timerRef = useRef<NodeJS.Timeout>();
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Detect viewport width to toggle mobile/desktop mode
   useEffect(() => {
@@ -43,7 +43,9 @@ export default function Hero({
 
   useEffect(() => {
     startAutoSlide();
-    return () => timerRef.current && clearInterval(timerRef.current);
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
   }, [images.length]);
 
   const pauseAutoSlide = () => {
@@ -60,7 +62,7 @@ export default function Hero({
       style={{ backgroundImage: `url(${bgImage})` }}
     >
       {/* Dark overlay for readability */}
-      <div className="absolute inset-0 bg-opacity-50 z-0" />
+      <div className="absolute inset-0 bg-black bg-opacity-50 z-0" />
 
       <div className="relative max-w-6xl px-6 py-16 flex flex-col md:flex-row items-center gap-12 z-10">
         {/* Left: Text */}
