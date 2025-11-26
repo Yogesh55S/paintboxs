@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 
 interface Props {
@@ -18,54 +18,39 @@ export default function Hero({
 }: Props) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Detect viewport width to toggle mobile/desktop mode
+  // Set isMobile in client only, with resize listener
   useEffect(() => {
-    function handleResize() {
-      setIsMobile(window.innerWidth < 768);
-    }
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
 
-    handleResize(); // Initial check
-    window.addEventListener("resize", handleResize);
-
-    return () => window.removeEventListener("resize", handleResize);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
+
+  // Carousel: manual change every 4 seconds, cleaned up safely
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prev) => {
+        const images = isMobile ? mobileImages : desktopImages;
+        return (prev + 1) % images.length;
+      });
+    }, 4000);
+
+    return () => clearInterval(interval);
+  }, [isMobile, mobileImages, desktopImages]);
 
   const images = isMobile ? mobileImages : desktopImages;
   const bgImage = isMobile ? mobileBg : desktopBg;
-
-  const startAutoSlide = () => {
-    timerRef.current = setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % images.length);
-    }, 4000);
-  };
-
-  useEffect(() => {
-    startAutoSlide();
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [images.length]);
-
-  const pauseAutoSlide = () => {
-    if (timerRef.current) clearInterval(timerRef.current);
-  };
-
-  const resumeAutoSlide = () => {
-    startAutoSlide();
-  };
 
   return (
     <section
       className="min-h-screen flex items-center justify-center relative bg-cover bg-center"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      {/* Overlay for readability */}
-      <div className="absolute inset-0 bg-black bg-opacity-50 z-0" />
+      <div className="absolute inset-0  bg-opacity-50 z-0" />
 
       <div className="relative max-w-6xl px-6 py-16 flex flex-col md:flex-row items-center gap-12 z-10">
-        {/* Text Section */}
         <div className="max-w-xl text-center md:text-left md:flex-1 space-y-6 text-white">
           <p className="text-sm md:text-base font-semibold tracking-widest text-[#93c5fd] uppercase">
             Professional House Painter
@@ -79,8 +64,8 @@ export default function Hero({
           </h1>
 
           <p className="text-gray-300 text-base md:text-lg max-w-md mx-auto md:mx-0">
-            Reliable interior and exterior painting with smooth finish, neat work,
-            and on-time completion.
+            Reliable interior and exterior painting with smooth finish, neat
+            work, and on-time completion.
           </p>
 
           <div className="flex flex-wrap justify-center md:justify-start gap-6">
@@ -107,12 +92,7 @@ export default function Hero({
           </div>
         </div>
 
-        {/* Carousel Card Section */}
-        <div
-          className="w-full max-w-sm rounded-3xl bg-white shadow-2xl p-6 relative overflow-hidden"
-          onMouseEnter={pauseAutoSlide}
-          onMouseLeave={resumeAutoSlide}
-        >
+        <div className="w-full max-w-sm rounded-3xl bg-white shadow-2xl p-6 relative overflow-hidden">
           <div className="relative w-full h-64 rounded-2xl overflow-hidden">
             <Image
               src={images[currentIndex]}
@@ -123,7 +103,6 @@ export default function Hero({
             />
           </div>
 
-          {/* Pagination Dots */}
           <div className="flex justify-center mt-4 space-x-2">
             {images.map((_, idx) => (
               <button
@@ -143,8 +122,7 @@ export default function Hero({
               Interior & Exterior Painting
             </h3>
             <p className="text-sm max-w-xs mx-auto">
-              Smooth finishes, two-coat painting, and on-time completion &mdash;
-              quality results you can trust.
+              Smooth finishes, two-coat painting, and on-time completion &mdash; quality results you can trust.
             </p>
           </div>
 
