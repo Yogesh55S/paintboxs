@@ -1,134 +1,82 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
 
 interface Props {
-  desktopImages: string[];
-  mobileImages: string[];
   desktopBg: string;
   mobileBg: string;
 }
 
-export default function Hero({
-  desktopImages,
-  mobileImages,
-  desktopBg,
-  mobileBg,
-}: Props) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+export default function Hero({ desktopBg, mobileBg }: Props) {
   const [isMobile, setIsMobile] = useState(false);
 
-  // Set isMobile in client only, with resize listener
+  // Detect viewport width on client
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
-
     checkMobile();
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Carousel: manual change every 4 seconds, cleaned up safely
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentIndex((prev) => {
-        const images = isMobile ? mobileImages : desktopImages;
-        return (prev + 1) % images.length;
-      });
-    }, 4000);
-
-    return () => clearInterval(interval);
-  }, [isMobile, mobileImages, desktopImages]);
-
-  const images = isMobile ? mobileImages : desktopImages;
   const bgImage = isMobile ? mobileBg : desktopBg;
 
   return (
     <section
-      className="min-h-screen flex items-center justify-center relative bg-cover bg-center"
+      className="min-h-[80vh] md:min-h-screen flex items-center relative bg-cover bg-center"
       style={{ backgroundImage: `url(${bgImage})` }}
     >
-      <div className="absolute inset-0  bg-opacity-50 z-0" />
+      {/* Dark overlay for readability */}
+      <div className="absolute inset-0 bg-black/55 z-0" />
 
-      <div className="relative max-w-6xl px-6 py-16 flex flex-col md:flex-row items-center gap-12 z-10">
-        <div className="max-w-xl text-center md:text-left md:flex-1 space-y-6 text-white">
-          <p className="text-sm md:text-base font-semibold tracking-widest text-[#93c5fd] uppercase">
+      {/* Content */}
+      <div className="relative z-10 w-full max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24">
+        <div className="max-w-2xl text-center md:text-left space-y-6 md:space-y-8">
+          <p className="text-xs sm:text-sm md:text-base font-semibold tracking-[0.25em] text-blue-200 uppercase">
             Professional House Painter
           </p>
 
-          <h1 className="text-4xl md:text-5xl font-extrabold leading-tight">
-            Clean, Quality Painting
-            <span className="block text-[#bfdbfe] mt-1">
-              for Your Home & Office
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight text-white">
+            Make Your Home
+            <span className="block text-blue-200">
+              Look Fresh & Beautiful
             </span>
           </h1>
 
-          <p className="text-gray-300 text-base md:text-lg max-w-md mx-auto md:mx-0">
-            Reliable interior and exterior painting with smooth finish, neat
-            work, and on-time completion.
+          <p className="text-sm sm:text-base md:text-lg text-slate-100/90 max-w-lg mx-auto md:mx-0">
+            Interior and exterior painting with clean edges, smooth finish, and
+            on‑time completion so you do not worry about the mess.
           </p>
 
-          <div className="flex flex-wrap justify-center md:justify-start gap-6">
+          {/* CTA buttons */}
+          <div className="flex flex-col xs:flex-row sm:flex-row gap-3 sm:gap-4 justify-center md:justify-start pt-2">
             <a
               href="#contact"
-              className="px-7 py-3 bg-[#1E3A8A] rounded-full font-semibold text-white shadow-lg hover:bg-[#16357a] transition"
+              className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-3.5 rounded-full bg-[#1E3A8A] text-white text-sm sm:text-base font-semibold shadow-lg hover:bg-[#16357a] transition"
             >
               Get Free Estimate
             </a>
             <a
-              href="#portfolio"
-              className="px-7 py-3 rounded-full border border-[#93c5fd] text-[#93c5fd] font-semibold hover:bg-[#93c5fd] hover:text-[#1E3A8A] transition"
+              href="#recent-work"
+              className="inline-flex items-center justify-center px-6 sm:px-8 py-3 sm:py-3.5 rounded-full border border-blue-200 text-blue-100 text-sm sm:text-base font-semibold hover:bg-blue-100 hover:text-[#1E3A8A] transition bg-white/5 backdrop-blur"
             >
               View Recent Work
             </a>
           </div>
 
-          <div className="mt-6 flex justify-center md:justify-start items-center gap-10 text-sm text-[#bfdbfe]">
+          {/* Highlights */}
+          <div className="pt-4 md:pt-6 flex flex-col sm:flex-row gap-3 sm:gap-6 items-center md:items-start justify-center md:justify-start text-xs sm:text-sm text-blue-100/90">
             <div className="flex items-center gap-2">
               <span className="inline-block h-2 w-2 rounded-full bg-emerald-400" />
-              <span>Free site visit & quote</span>
+              <span>Free site visit & detailed quote</span>
             </div>
-            <span>Interior • Exterior • Repainting</span>
-          </div>
-        </div>
-
-        <div className="w-full max-w-sm rounded-3xl bg-white shadow-2xl p-6 relative overflow-hidden">
-          <div className="relative w-full h-64 rounded-2xl overflow-hidden">
-            <Image
-              src={images[currentIndex]}
-              alt={`Project image ${currentIndex + 1}`}
-              fill
-              className="object-cover rounded-2xl transition-opacity duration-700 ease-in-out"
-              key={currentIndex}
-            />
-          </div>
-
-          <div className="flex justify-center mt-4 space-x-2">
-            {images.map((_, idx) => (
-              <button
-                key={idx}
-                className={`w-3 h-3 rounded-full ${
-                  idx === currentIndex ? "bg-[#1E3A8A]" : "bg-gray-300"
-                }`}
-                onClick={() => setCurrentIndex(idx)}
-                aria-label={`Go to slide ${idx + 1}`}
-              />
-            ))}
-          </div>
-
-          <div className="mt-6 text-center space-y-2 text-gray-700">
-            <p className="uppercase text-xs tracking-wide">Recent Project</p>
-            <h3 className="font-semibold text-lg text-slate-800">
-              Interior & Exterior Painting
-            </h3>
-            <p className="text-sm max-w-xs mx-auto">
-              Smooth finishes, two-coat painting, and on-time completion &mdash; quality results you can trust.
-            </p>
-          </div>
-
-          <div className="mt-4 flex justify-between text-gray-400 text-xs font-medium max-w-xs mx-auto">
-            <span>Living room &middot; Bedroom &middot; Kitchen &middot; Exterior walls</span>
-            <span className="text-[#1E3A8A]">On-time delivery</span>
+            <div className="hidden sm:block h-4 w-px bg-blue-100/40" />
+            <div className="flex flex-wrap gap-2 justify-center">
+              <span>Interior</span>
+              <span>•</span>
+              <span>Exterior</span>
+              <span>•</span>
+              <span>Repainting</span>
+            </div>
           </div>
         </div>
       </div>

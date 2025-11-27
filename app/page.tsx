@@ -1,6 +1,6 @@
 import Hero from "./components/Hero";
 import Navbar from "./components/Navbar";
-
+import RecentWork from "./recent-work/page";
 const desktopImages = [
   "/images/im.jpg",
   "/images/im2.jpg",
@@ -27,7 +27,9 @@ export default function Home() {
           desktopBg={desktopBg}
           mobileBg={mobileBg}
         />
-      </main>
+       
+      </main> 
+      <RecentWork/>
     </>
   );
 }
