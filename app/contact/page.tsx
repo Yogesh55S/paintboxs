@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { Phone, Mail, MapPin, Send, MessageCircle } from "lucide-react";
 
@@ -22,9 +22,8 @@ export default function ContactPage() {
     business: "PaintBro",
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Handle form submission
     alert("Thank you! We'll contact you within 24 hours.");
     setFormData({ name: "", phone: "", email: "", service: "", message: "" });
   };
