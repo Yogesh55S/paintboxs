@@ -39,7 +39,7 @@ export default function Hero({ desktopBg, mobileBg }: Props) {
             Make Your Home
             <span className="block text-blue-200">
               Look Fresh & Beautiful
-            </span>
+            </span> 
           </h1>
 
           <p className="text-sm sm:text-base md:text-lg text-slate-100/90 max-w-lg mx-auto md:mx-0">
